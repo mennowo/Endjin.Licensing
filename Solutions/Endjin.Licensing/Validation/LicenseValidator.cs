@@ -36,14 +36,14 @@
         /// <exception cref="InvalidLicenseException">Indicates that the license is invalid / corrupt / empty.</exception>
         /// <exception cref="LicenseViolationException">Indicates that a license validation rule has been violated.</exception>
         /// <exception cref="AggregateException">Indicates that one or more license validation rules have been violated.</exception>
-        public void Validate(IClientLicense clientLicense, ICryptoKey publicKey, IEnumerable<ILicenseValidationRule> validationRules)
+        public void Validate(IClientLicense clientLicense, ICryptoKey publicKey, IEnumerable<ILicenseValidationRule> validationRules, string elementKey = null)
         {
             if (!LicenseSignatureValidator.ValidateSignature(clientLicense, publicKey))
             {
                 throw new InvalidLicenseException(clientLicense);
             }
 
-            this.LicenseCriteria = this.licenseCriteriaParser.Parse(clientLicense);
+            this.LicenseCriteria = this.licenseCriteriaParser.Parse(clientLicense, elementKey);
 
             validationRules.ForEachFailEnd(x => x.Validate(this.LicenseCriteria));
         }

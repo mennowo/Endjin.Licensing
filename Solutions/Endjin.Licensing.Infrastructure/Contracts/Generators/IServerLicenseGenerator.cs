@@ -15,6 +15,6 @@
     /// </summary>
     public interface IServerLicenseGenerator
     {
-        IServerLicense Generate(IPrivateCryptoKey privateKey, LicenseCriteria licenseCriteria);
+        IServerLicense Generate(IPrivateCryptoKey privateKey, LicenseCriteria licenseCriteria, string elementKey = null);
     }
 }
