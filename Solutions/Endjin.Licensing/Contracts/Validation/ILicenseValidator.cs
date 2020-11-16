@@ -19,7 +19,7 @@
         /// <param name="clientLicense"><see cref="IClientLicense">Client License</see> to validate</param>
         /// <param name="publicKey"><see cref="ICryptoKey">Public Key</see> to determine whether the license has been tampered with</param>
         /// <param name="validationRules">Collection of <see cref="ILicenseValidationRule">Validation Rules</see> to evaulate against the <see cref="IClientLicense">Client License</see></param>
-        void Validate(IClientLicense clientLicense, ICryptoKey publicKey, IEnumerable<ILicenseValidationRule> validationRules);
+        void Validate(IClientLicense clientLicense, ICryptoKey publicKey, IEnumerable<ILicenseValidationRule> validationRules, string elementKey = null);
 
         /// <summary>
         /// The <see cref="LicenseCriteria">License Criteria</see> extracted from the <see cref="IClientLicense">Client License</see>
