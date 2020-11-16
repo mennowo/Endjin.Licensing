@@ -25,24 +25,24 @@
 
             if (!string.IsNullOrEmpty(elementKey))
             {
-                SHA256CryptoServiceProvider hashSHA256 = new SHA256CryptoServiceProvider();
-                byte[] keyArray = hashSHA256.ComputeHash(UTF8Encoding.UTF8.GetBytes(elementKey));
+                var hashSha256 = new SHA256CryptoServiceProvider();
+                var keyArray = hashSha256.ComputeHash(Encoding.UTF8.GetBytes(elementKey));
 
                 //Always release the resources and flush data
                 // of the Cryptographic service provide. Best Practice
-                hashSHA256.Clear();
+                hashSha256.Clear();
 
                 // Create a new TripleDES key. 
-                Rijndael Rijndaelkey = Rijndael.Create();
+                var rijndaelkey = Rijndael.Create();
 
-                Rijndaelkey.Key = keyArray;
+                rijndaelkey.Key = keyArray;
 
                 try
                 {
                     foreach (var metaData in licenseCriteria.MetaData)
                     {
                         // Encrypt the metadata element.
-                        Encrypt(licenseDocument, metaData.Key, Rijndaelkey);
+                        Encrypt(licenseDocument, metaData.Key, rijndaelkey);
                     }
 
                     // Display the encrypted XML to the console.
@@ -57,7 +57,7 @@
                 finally
                 {
                     // Clear the TripleDES key.
-                    Rijndaelkey.Clear();
+                    rijndaelkey.Clear();
                 }
             }
 
@@ -110,21 +110,19 @@
         {
             // Check the arguments.  
             if (Doc == null)
-                throw new ArgumentNullException("Doc");
+                throw new ArgumentNullException(nameof(Doc));
             if (ElementToEncrypt == null)
-                throw new ArgumentNullException("ElementToEncrypt");
+                throw new ArgumentNullException(nameof(ElementToEncrypt));
             if (Alg == null)
-                throw new ArgumentNullException("Alg");
+                throw new ArgumentNullException(nameof(Alg));
 
             ////////////////////////////////////////////////
             // Find the specified element in the XmlDocument
             // object and create a new XmlElemnt object.
             ////////////////////////////////////////////////
 
-            XmlElement elementToEncrypt = Doc.GetElementsByTagName(ElementToEncrypt)[0] as XmlElement;
-
             // Throw an XmlException if the element was not found.
-            if (elementToEncrypt == null)
+            if (!(Doc.GetElementsByTagName(ElementToEncrypt)[0] is XmlElement elementToEncrypt))
             {
                 throw new XmlException("The specified element was not found");
 
@@ -136,9 +134,9 @@
             // symmetric key.
             //////////////////////////////////////////////////
 
-            EncryptedXml eXml = new EncryptedXml();
+            var eXml = new EncryptedXml();
 
-            byte[] encryptedElement = eXml.EncryptData(elementToEncrypt, Alg, false);
+            var encryptedElement = eXml.EncryptData(elementToEncrypt, Alg, false);
 
             ////////////////////////////////////////////////
             // Construct an EncryptedData object and populate
@@ -146,8 +144,7 @@
             ////////////////////////////////////////////////
 
 
-            EncryptedData edElement = new EncryptedData();
-            edElement.Type = EncryptedXml.XmlEncElementUrl;
+            var edElement = new EncryptedData {Type = EncryptedXml.XmlEncElementUrl};
 
             // Create an EncryptionMethod element so that the 
             // receiver knows which algorithm to use for decryption.

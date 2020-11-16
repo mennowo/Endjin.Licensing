@@ -6,6 +6,7 @@ using Endjin.Licensing.Contracts.Validation;
 using Endjin.Licensing.Demo.ClientApp.Validation.Rules;
 using Endjin.Licensing.Domain;
 using Endjin.Licensing.Exceptions;
+using Endjin.Licensing.Parsers;
 using Endjin.Licensing.Validation;
 using Endjin.Licensing.Validation.Rules;
 
