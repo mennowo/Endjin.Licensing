@@ -31,7 +31,8 @@ namespace Endjin.Licensing.Demo.ServerApp
             };
 
             var privateKey = new RsaPrivateKeyProvider().Create();
-            var serverLicense = new ServerLicenseGenerator().Generate(privateKey, licenseCriteria);
+            //var serverLicense = new ServerLicenseGenerator().Generate(privateKey, licenseCriteria);
+            var serverLicense = new ServerLicenseGenerator().Generate(privateKey, licenseCriteria, "This is my password");
             var clientLicense = serverLicense.ToClientLicense();
 
             // In a real implementation, you would embed the public key into the assembly, via a resource file

@@ -27,12 +27,30 @@ namespace Endjin.Licensing.Demo.ClientApp
                 Environment.Exit(-1);
             }
 
+            // GetKey(licensePath);
+            GetKey(licensePath, "This is my password");
             ValidateLicense(publicKeyPath, licensePath);
 
             Console.WriteLine(Messages.NoLicenseViolations);
             Console.WriteLine(Messages.PressAnyKey);
 
             Console.ReadKey();
+        }
+
+        private static void GetKey(string licensePath, string elementKey = null)
+        {
+            var clientLicense = ClientLicense.Create(File.ReadAllText(licensePath));
+
+            var mylcP = new LicenseCriteriaParser();
+            var licenseCriteria = mylcP.Parse(clientLicense, elementKey);
+            if (licenseCriteria.MetaData.ContainsKey("LicensedCores"))
+            {
+                Console.WriteLine(licenseCriteria.MetaData["LicensedCores"]);
+            }
+            else
+            {
+                Console.WriteLine("no key found");
+            }
         }
 
         private static void ValidateLicense(string publicKeyPath, string licensePath)
@@ -50,7 +68,8 @@ namespace Endjin.Licensing.Demo.ClientApp
                     new ValidNumberOfCoresLicenseRule()
                 };
 
-                new LicenseValidator().Validate(clientLicense, publicKey, licenseValidationRules);
+                // new LicenseValidator().Validate(clientLicense, publicKey, licenseValidationRules);
+                new LicenseValidator().Validate(clientLicense, publicKey, licenseValidationRules, "This is my password");
             }
             catch (InvalidLicenseException exception)
             {
